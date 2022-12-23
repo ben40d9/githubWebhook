@@ -1,7 +1,5 @@
 import { Octokit, App } from "octokit";
 
-import { url } from "./ngrok.js";
-
 //import dotenv
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -28,6 +26,7 @@ export const gitHubActions = {
   //     insecure_ssl: "0",
   //   },
   // }),
+
   // list repo webhooks
   listRepoWebhooks: await octokit.request(
     "GET /repos/{owner}/{repo}/hooks{?per_page,page}",
@@ -36,6 +35,8 @@ export const gitHubActions = {
       repo: `${GH_REPO_NAME}`,
     }
   ),
+
+  //test push to webhook
   testPushToRepoWebhook: await octokit.request(
     "POST /repos/{owner}/{repo}/hooks/{hook_id}/tests",
     {
@@ -44,6 +45,17 @@ export const gitHubActions = {
       hook_id: "393663340",
     }
   ),
+
+  //list deliveries for a webhook
+  listDeleveriesForARepo: await octokit.request(
+    "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries{?per_page,cursor,redelivery}",
+    {
+      owner: `${GH_ACCOUNT}`,
+      repo: `${GH_REPO_NAME}`,
+      hook_id: "393663340",
+    }
+  ),
+
   // delete a specific webhook from repo
   // deleteSpecificRepoWebhook: await octokit.request(
   //   "DELETE /repos/{owner}/{repo}/hooks/{hook_id}",
@@ -55,15 +67,16 @@ export const gitHubActions = {
   //     hook_id: "393663274",
   //   }
   // ),
-  // // get a repo webhook
-  //   getRepoWebhook: await octokit.request(
-  //     "GET /repos/{owner}/{repo}/hooks/{hook_id}",
-  //     {
-  //       owner: `${GH_ACCOUNT}`,
-  //       repo: `${GH_REPO_NAME}`,
-  //       hook_id: "393532361",
-  //     }
-  //   ),
+
+  // get a repo webhook
+  getRepoWebhook: await octokit.request(
+    "GET /repos/{owner}/{repo}/hooks/{hook_id}",
+    {
+      owner: `${GH_ACCOUNT}`,
+      repo: `${GH_REPO_NAME}`,
+      hook_id: "393663340",
+    }
+  ),
 };
 
 // const pooer = gitHubActions.listRepoWebhooks.data.forEach((item) => {
