@@ -1,83 +1,77 @@
-//WILL PUT EVERYTHING REGARDING OCTOKIT HERE EVENTUALLY
-//for now just putting in index b/c target url is found there
-
 import { Octokit, App } from "octokit";
 
 import { url } from "./ngrok.js";
 
+//import dotenv
+import * as dotenv from "dotenv";
+dotenv.config();
+
 //import values set in .env
 const { GH_TOKEN, GH_REPO_NAME, GH_ACCOUNT } = process.env;
-// console.log(GH_TOKEN);
 
 export const octokit = new Octokit({
   auth: `${GH_TOKEN}`,
 });
 
-export const createWebhookPush = await octokit.request(
-  "POST /repos/{owner}/{repo}/hooks",
-  {
-    owner: `${GH_ACCOUNT}`,
-    repo: `${GH_REPO_NAME}`,
-    name: "web",
-    active: true,
-    events: ["push"],
-    config: {
-      url: `${url}`,
-      content_type: "json",
-      insecure_ssl: "0",
-    },
-  }
-);
+//all webhook actions
+export const gitHubActions = {
+  //create webhook
+  // createWebhookPush: await octokit.request("POST /repos/{owner}/{repo}/hooks", {
+  //   owner: `${GH_ACCOUNT}`,
+  //   repo: `${GH_REPO_NAME}`,
+  //   name: "web",
+  //   active: true,
+  //   events: ["push"],
+  //   config: {
+  //     url: `${url}`,
+  //     content_type: "json",
+  //     insecure_ssl: "0",
+  //   },
+  // }),
+  // list repo webhooks
+  listRepoWebhooks: await octokit.request(
+    "GET /repos/{owner}/{repo}/hooks{?per_page,page}",
+    {
+      owner: `${GH_ACCOUNT}`,
+      repo: `${GH_REPO_NAME}`,
+    }
+  ),
+  testPushToRepoWebhook: await octokit.request(
+    "POST /repos/{owner}/{repo}/hooks/{hook_id}/tests",
+    {
+      owner: `${GH_ACCOUNT}`,
+      repo: `${GH_REPO_NAME}`,
+      hook_id: "393663340",
+    }
+  ),
+  // delete a specific webhook from repo
+  // deleteSpecificRepoWebhook: await octokit.request(
+  //   "DELETE /repos/{owner}/{repo}/hooks/{hook_id}",
+  //   {
+  //     owner: `${GH_ACCOUNT}`,
+  //     repo: `${GH_REPO_NAME}`,
+  //     //need to ask or have user give hook_id
+  //     //(maybe have to list webhooks first then )
+  //     hook_id: "393663274",
+  //   }
+  // ),
+  // // get a repo webhook
+  //   getRepoWebhook: await octokit.request(
+  //     "GET /repos/{owner}/{repo}/hooks/{hook_id}",
+  //     {
+  //       owner: `${GH_ACCOUNT}`,
+  //       repo: `${GH_REPO_NAME}`,
+  //       hook_id: "393532361",
+  //     }
+  //   ),
+};
 
-console.log(createWebhookPush);
+// const pooer = gitHubActions.listRepoWebhooks.data.forEach((item) => {
+//   console.log(item.id);
+// });
+// console.log(pooer);
 
-// const webConfig = await octokit.request(
-//   "GET /repos/{owner}/{repo}/hooks/{hook_id}/config",
-//   {
-//     owner: `${GH_ACCOUNT}`,
-//     repo: `${GH_REPO_NAME}`,
-//     hook_id: "HOOK_ID",
-//   }
-// );
-
-// export const listRepoWebhooks = async () => {
-//   await octokit.request("GET /repos/{owner}/{repo}/hooks{?per_page,page}", {
-//     owner: `${GH_ACCOUNT}`,
-//     repo: "webhookListen",
-//   });
-// };
-// console.log(listRepoWebhooks());
-
-// export const gitHubActions = {
-//   createWebhookPush: async () => {
-//     await octokit.request("POST /repos/{owner}/{repo}/hooks", {
-//       owner: `${GH_ACCOUNT}`,
-//       repo: `${GH_REPO_NAME}`,
-//       name: "web",
-//       active: true,
-//       events: ["push"],
-//       config: {
-//         url: `${url}`,
-//         content_type: "json",
-//         insecure_ssl: "0",
-//       },
-//     });
-//   },
-
-//   listRepoWebhooks: async () => {
-//     await octokit.request("GET /repos/{owner}/{repo}/hooks{?per_page,page}", {
-//       owner: `${GH_ACCOUNT}`,
-//       repo: `${GH_REPO_NAME}`,
-//     });
-//     console.log(listRepoWebhooks);
-//   },
-// };
-
-// console.log(gitHubActions.createWebhookPush());
-
-// async () => {
-//   await url;
-//   await gitHubActions.createWebhookPush;
-//   await gitHubActions.listRepoWebhooks;
-//   console.log(gitHubActions.listRepoWebhooks);
-// };
+// const one = pooer.forEach((poo) => {
+//   [...poo];
+// });
+// console.log(one)
