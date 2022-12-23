@@ -18,20 +18,23 @@ import { gitHubActions, octokit } from "./octokit.js";
   });
   console.log(url);
 
-  // const specificHook = await gitHubActions.getRepoWebhook;
-  // console.log(specificHook);
-
   const listOfWebhooks = await gitHubActions.listRepoWebhooks;
   // await console.log(listOfWebhooks);
+
+  const specificHook = await gitHubActions.getRepoWebhook;
+  console.log(specificHook);
 
   // await gitHubActions.deleteSpecificRepoWebhook;
   await console.log(gitHubActions.listRepoWebhooks.data.length);
 
-  // const testPush = gitHubActions.testPushToRepoWebhook;
-  // console.log(testPush.status);
+  const testPush = gitHubActions.testPushToRepoWebhook;
+  console.log(testPush.status); //Status: 204 => No Content
 
   const listOfDelivered = await gitHubActions.listDeleveriesForARepo;
   console.log(listOfDelivered.data.length);
+
+  const ping = await gitHubActions.pingRepoWebhook;
+  console.log(ping);
 
   // const pooer = await gitHubActions.listRepoWebhooks.data.forEach((item) => {
   //   console.log(item.id);
