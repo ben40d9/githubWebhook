@@ -4,7 +4,7 @@ import express from "express";
 
 const app = express();
 
-// import { NGROK_TOKEN } from "./hidden/index.js";
+import { NGROK_TOKEN } from "./hidden/index.js";
 
 // //import dotenv
 // import * as dotenv from "dotenv";
@@ -20,7 +20,7 @@ import { gitHubActions, octokit } from "./octokit.js";
   const url = await ngrok.connect({
     proto: "http",
     addr: 8180,
-    authtoken: "2INNlEthLOiiKCffVd9oZtFF0oM_7wSKZn8bJKCbWjqtSGXFR",
+    authtoken: `${NGROK_TOKEN}`,
   });
   console.log(`This is our ngrok tunnel: ${url}`);
 
