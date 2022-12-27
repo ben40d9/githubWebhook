@@ -25,13 +25,17 @@ import { gitHubActions, octokit } from "./octokit.js";
   console.log(specificHook);
 
   // await gitHubActions.deleteSpecificRepoWebhook;
-  await console.log(gitHubActions.listRepoWebhooks.data.length);
+  await console.log(
+    `The amount of webhooks for this repo is : ${gitHubActions.listRepoWebhooks.data.length}`
+  );
 
   const testPush = gitHubActions.testPushToRepoWebhook;
-  console.log(testPush.status); //Status: 204 => No Content
+  console.log(`The test push status is : ${testPush.status}`); //Status: 204 => No Content
 
   const listOfDelivered = await gitHubActions.listDeleveriesForARepo;
-  console.log(listOfDelivered.data.length);
+  console.log(
+    `The amount of webhook deliveries for THIS webhook in this repo is : ${listOfDelivered.data.length}`
+  );
 
   const ping = await gitHubActions.pingRepoWebhook;
   console.log(ping);
