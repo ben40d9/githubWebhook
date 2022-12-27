@@ -1,11 +1,13 @@
 import { Octokit, App } from "octokit";
 
-//import dotenv
-import * as dotenv from "dotenv";
-dotenv.config();
+import { GH_ACCOUNT, GH_REPO_NAME, GH_TOKEN } from "./hidden/index.js";
 
-//import values set in .env
-const { GH_TOKEN, GH_REPO_NAME, GH_ACCOUNT } = process.env;
+// //import dotenv
+// import * as dotenv from "dotenv";
+// dotenv.config();
+
+// //import values set in .env
+// const { GH_TOKEN, GH_REPO_NAME, GH_ACCOUNT } = process.env;
 
 export const octokit = new Octokit({
   auth: `${GH_TOKEN}`,
@@ -46,7 +48,7 @@ export const gitHubActions = {
     }
   ),
 
-  //list deliveries for a webhook
+  //returns a list of webhook deliveries for a webhook configured in a repository
   listDeleveriesForARepo: await octokit.request(
     "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries{?per_page,cursor,redelivery}",
     {
