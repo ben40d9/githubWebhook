@@ -80,6 +80,16 @@ export const gitHubActions = {
     }
   ),
 
+  //get a webhook configuration for a repo
+  getWebhookConfig: await octokit.request(
+    "GET /repos/{owner}/{repo}/hooks/{hook_id}/config",
+    {
+      owner: `${GH_ACCOUNT}`,
+      repo: `${GH_REPO_NAME}`,
+      hook_id: "393663340",
+    }
+  ),
+
   //ping a repository webhook
   pingRepoWebhook: await octokit.request(
     "POST /repos/{owner}/{repo}/hooks/{hook_id}/pings",
