@@ -26,21 +26,26 @@ import { gitHubActions, octokit } from "./octokit.js";
 
   //get our specific webhook
   const specificHook = await gitHubActions.getRepoWebhook;
-  //the url to which the payloads will be delivered
-  console.log(specificHook.data.config.url);
 
-  let urlToPayloadDelivery = await specificHook.data.config.url;
-  urlToPayloadDelivery === `${url}`;
-  await console.log(urlToPayloadDelivery);
-  await console.log(specificHook.data.config.url);
+  //the OLD url to which the payloads will be delivered (to show change)
+  console.log(`the OLD url ${specificHook.data.config.url}`);
 
-  // await console.log(
-  //   `The amount of webhooks for this repo is : ${gitHubActions.listRepoWebhooks.data.length}`
-  // );
+  //change the url that the payloads will be delivered to equal our ngrok tunnel
+  specificHook.data.config.url = await url;
 
-  // //this will trigger the hook with the latest push to the current repository(has to be sub to push events)
-  // const testPush = gitHubActions.testPushToRepoWebhook;
-  // console.log(`The test push status is : ${testPush.status}`); //Status: 204 => No Content
+  //url should be changed now
+  await console.log(
+    `url should be changed now ${specificHook.data.config.url}`
+  );
+
+  //amount of webhooks for this repo
+  await console.log(
+    `The amount of webhooks for this repo is : ${gitHubActions.listRepoWebhooks.data.length}`
+  );
+
+  //this will trigger the hook with the latest push to the current repository(has to be sub to push events)
+  const testPush = gitHubActions.testPushToRepoWebhook;
+  console.log(`The test push status is : ${testPush.status}`); //Status: 204 => No Content
 
   // //returns a list of webhook deliveries for a webhook configured in a repository
   // const listOfDelivered = await gitHubActions.listDeleveriesForARepo;
@@ -50,11 +55,10 @@ import { gitHubActions, octokit } from "./octokit.js";
   //   `The amount of webhook deliveries for THIS webhook in this repo is : ${listOfDelivered.data.length}`
   // );
 
-  // //this will trigger a ping event to be sent to the hook
-  // const ping = await gitHubActions.pingRepoWebhook;
-  // console.log(`ping: ${ping}`);
+  //this will trigger a ping event to be sent to the hook
+  const ping = await gitHubActions.pingRepoWebhook;
+  console.log(`ping: ${ping}`);
 
-  //
   app.listen(8180, () => {
     console.log("listening...");
   });
