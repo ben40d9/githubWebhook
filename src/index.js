@@ -22,20 +22,20 @@ import { gitHubActions, octokit } from "./octokit.js";
     addr: 8180,
     authtoken: `${NGROK_TOKEN}`,
   });
-  console.log(`This is our ngrok tunnel: ${url}`);
+  console.log(`This is our ngrok tunnel : ${url}`);
 
   //get our specific webhook
   const specificHook = await gitHubActions.getRepoWebhook;
 
   //the OLD url to which the payloads will be delivered (to show change)
-  console.log(`the OLD url ${specificHook.data.config.url}`);
+  console.log(`the OLD url : ${specificHook.data.config.url}`);
 
   //change the url that the payloads will be delivered to equal our ngrok tunnel
   specificHook.data.config.url = await url;
 
   //url should be changed now
   await console.log(
-    `url should be changed now ${specificHook.data.config.url}`
+    `url should be changed now : ${specificHook.data.config.url}`
   );
 
   //amount of webhooks for this repo
@@ -57,7 +57,7 @@ import { gitHubActions, octokit } from "./octokit.js";
 
   //this will trigger a ping event to be sent to the hook
   const ping = await gitHubActions.pingRepoWebhook;
-  console.log(`ping: ${ping}`);
+  console.log(`ping : ${ping.headers}`);
 
   app.listen(8180, () => {
     console.log("listening...");
