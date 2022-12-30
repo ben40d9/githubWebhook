@@ -99,6 +99,19 @@ export const gitHubActions = {
       hook_id: "393663340",
     }
   ),
+
+  //update a webhook configuration for a repo
+  updateWebhookConfig: await octokit.request(
+    "PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config",
+    {
+      owner: `${GH_ACCOUNT}`,
+      repo: `${GH_REPO_NAME}`,
+      hook_id: "393663340",
+      content_type: "json",
+      //change here
+      url: "https://example.com/webhook",
+    }
+  ),
 };
 
 // const pooer = gitHubActions.listRepoWebhooks.data.forEach((item) => {
