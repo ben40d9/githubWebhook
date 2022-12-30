@@ -59,6 +59,7 @@ import { gitHubActions, octokit } from "./octokit.js";
   // console.log(
   //   `The amount of webhook deliveries for THIS webhook in this repo is : ${listOfDelivered.data.length}`
   // );
+  //test
 
   //this will trigger a ping event to be sent to the hook
   const ping = await gitHubActions.pingRepoWebhook;
