@@ -22,35 +22,49 @@ import { gitHubActions, octokit } from "./octokit.js";
   const currentUrl = await url;
   console.log(`This is our ngrok tunnel : ${currentUrl}`);
 
-  //get our specific webhook
-  const specificHook = await gitHubActions.getRepoWebhook;
+  // //get our specific webhook
+  // const specificHook = await gitHubActions.getRepoWebhook;
 
-  //the hooks data
-  console.log(specificHook.data);
-
-  //the OLD url to which the payloads will be delivered (to show change)
-  console.log(`the OLD url : ${specificHook.data.config.url}`);
-
-  //change the url that the payloads will be delivered to equal our ngrok tunnel
-  specificHook.data.config.url = await url;
-
-  //url should be changed now
-  await console.log(
-    `url should be changed now : ${specificHook.data.config.url}`
-  );
-
+  // //the hooks data
   // console.log(specificHook.data);
 
-  //amount of webhooks for this repo
-  await console.log(
-    `The amount of webhooks for this repo is : ${gitHubActions.listRepoWebhooks.data.length}`
+  // //the OLD url to which the payloads will be delivered (to show change)
+  // console.log(`the OLD url : ${specificHook.data.config.url}`);
+
+  const updateWebhookConfig = await octokit.request(
+    "PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config",
+    {
+      owner: "ben40d9",
+      repo: "next-blog",
+      hook_id: "393663340",
+      content_type: "json",
+      //change here
+      url: `${currentUrl}`,
+    }
   );
 
-  //this will trigger the hook with the latest push to the current repository(has to be sub to push events)
-  const testPush = gitHubActions.testPushToRepoWebhook;
-  console.log(`The test push status is : ${testPush.status}`); //Status: 204 => No Content
+  console.log(updateWebhookConfig);
 
-  console.log(testPush);
+  // //change the url that the payloads will be delivered to equal our ngrok tunnel
+  // specificHook.data.config.url = await url;
+
+  // //url should be changed now
+  // await console.log(
+  //   `url should be changed now : ${specificHook.data.config.url}`
+  // );
+
+  // // console.log(specificHook.data);
+
+  // //amount of webhooks for this repo
+  // await console.log(
+  //   `The amount of webhooks for this repo is : ${gitHubActions.listRepoWebhooks.data.length}`
+  // );
+
+  // //this will trigger the hook with the latest push to the current repository(has to be sub to push events)
+  // const testPush = gitHubActions.testPushToRepoWebhook;
+  // console.log(`The test push status is : ${testPush.status}`); //Status: 204 => No Content
+
+  // console.log(testPush);
 
   // //returns a list of webhook deliveries for a webhook configured in a repository
   // const listOfDelivered = await gitHubActions.listDeleveriesForARepo;
@@ -61,9 +75,9 @@ import { gitHubActions, octokit } from "./octokit.js";
   // );
   //test
 
-  //this will trigger a ping event to be sent to the hook
-  const ping = await gitHubActions.pingRepoWebhook;
-  console.log(`ping : ${ping}`);
+  // //this will trigger a ping event to be sent to the hook
+  // const ping = await gitHubActions.pingRepoWebhook;
+  // console.log(`ping : ${ping}`);
 
   app.listen(8180, () => {
     console.log("listening...");
