@@ -27,6 +27,9 @@ import { gitHubActions, octokit } from "./octokit.js";
   //get our specific webhook
   const specificHook = await gitHubActions.getRepoWebhook;
 
+  //the hooks data
+  console.log(specificHook.data);
+
   //the OLD url to which the payloads will be delivered (to show change)
   console.log(`the OLD url : ${specificHook.data.config.url}`);
 
@@ -38,6 +41,8 @@ import { gitHubActions, octokit } from "./octokit.js";
     `url should be changed now : ${specificHook.data.config.url}`
   );
 
+  console.log(specificHook.data);
+
   //amount of webhooks for this repo
   await console.log(
     `The amount of webhooks for this repo is : ${gitHubActions.listRepoWebhooks.data.length}`
@@ -46,6 +51,8 @@ import { gitHubActions, octokit } from "./octokit.js";
   //this will trigger the hook with the latest push to the current repository(has to be sub to push events)
   const testPush = gitHubActions.testPushToRepoWebhook;
   console.log(`The test push status is : ${testPush.status}`); //Status: 204 => No Content
+
+  console.log(testPush);
 
   // //returns a list of webhook deliveries for a webhook configured in a repository
   // const listOfDelivered = await gitHubActions.listDeleveriesForARepo;
