@@ -4,7 +4,9 @@ import express from "express";
 
 const app = express();
 
-import { NGROK_TOKEN } from "./hidden/index.js";
+import { url } from "./ngrok.js";
+
+// import { NGROK_TOKEN } from "./hidden/index.js";
 
 // //import dotenv
 // import * as dotenv from "dotenv";
@@ -17,12 +19,8 @@ import { gitHubActions, octokit } from "./octokit.js";
 
 (async () => {
   //connect to ngrok server and return the tunnel they make
-  const url = await ngrok.connect({
-    proto: "http",
-    addr: 8180,
-    authtoken: `${NGROK_TOKEN}`,
-  });
-  console.log(`This is our ngrok tunnel : ${url}`);
+  const currentUrl = await url;
+  console.log(`This is our ngrok tunnel : ${currentUrl}`);
 
   //get our specific webhook
   const specificHook = await gitHubActions.getRepoWebhook;
@@ -41,7 +39,7 @@ import { gitHubActions, octokit } from "./octokit.js";
     `url should be changed now : ${specificHook.data.config.url}`
   );
 
-  console.log(specificHook.data);
+  // console.log(specificHook.data);
 
   //amount of webhooks for this repo
   await console.log(
@@ -64,7 +62,7 @@ import { gitHubActions, octokit } from "./octokit.js";
 
   //this will trigger a ping event to be sent to the hook
   const ping = await gitHubActions.pingRepoWebhook;
-  console.log(`ping : ${ping.headers}`);
+  console.log(`ping : ${ping}`);
 
   app.listen(8180, () => {
     console.log("listening...");
