@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 //make var for our token so it is hidden
-const NGROK_TOKEN = process.env.NGROK_TOKEN;
+import { NGROK_TOKEN } from "./hidden/index.js";
 
 //connect to ngrok server and return the tunnel they make
 export const url = await ngrok.connect({
@@ -13,5 +13,3 @@ export const url = await ngrok.connect({
   addr: 8180, // port or network address, defaults to 80
   authtoken: `${NGROK_TOKEN}`, // your authtoken from ngrok.com
 });
-
-// console.log(url);

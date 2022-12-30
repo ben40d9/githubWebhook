@@ -1,13 +1,13 @@
 import { Octokit, App } from "octokit";
 
-import { url } from "./ngrok.js";
+import { GH_ACCOUNT, GH_REPO_NAME, GH_TOKEN } from "./hidden/index.js";
 
-//import dotenv
-import * as dotenv from "dotenv";
-dotenv.config();
+// //import dotenv
+// import * as dotenv from "dotenv";
+// dotenv.config();
 
-//import values set in .env
-const { GH_TOKEN, GH_REPO_NAME, GH_ACCOUNT } = process.env;
+// //import values set in .env
+// const { GH_TOKEN, GH_REPO_NAME, GH_ACCOUNT } = process.env;
 
 export const octokit = new Octokit({
   auth: `${GH_TOKEN}`,
@@ -28,6 +28,7 @@ export const gitHubActions = {
   //     insecure_ssl: "0",
   //   },
   // }),
+
   // list repo webhooks
   listRepoWebhooks: await octokit.request(
     "GET /repos/{owner}/{repo}/hooks{?per_page,page}",
@@ -36,6 +37,8 @@ export const gitHubActions = {
       repo: `${GH_REPO_NAME}`,
     }
   ),
+
+  //test push to webhook
   testPushToRepoWebhook: await octokit.request(
     "POST /repos/{owner}/{repo}/hooks/{hook_id}/tests",
     {
@@ -44,6 +47,17 @@ export const gitHubActions = {
       hook_id: "393663340",
     }
   ),
+
+  //returns a list of webhook deliveries for a webhook configured in a repository
+  listDeleveriesForARepo: await octokit.request(
+    "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries{?per_page,cursor,redelivery}",
+    {
+      owner: `${GH_ACCOUNT}`,
+      repo: `${GH_REPO_NAME}`,
+      hook_id: "393663340",
+    }
+  ),
+
   // delete a specific webhook from repo
   // deleteSpecificRepoWebhook: await octokit.request(
   //   "DELETE /repos/{owner}/{repo}/hooks/{hook_id}",
@@ -55,15 +69,36 @@ export const gitHubActions = {
   //     hook_id: "393663274",
   //   }
   // ),
-  // // get a repo webhook
-  //   getRepoWebhook: await octokit.request(
-  //     "GET /repos/{owner}/{repo}/hooks/{hook_id}",
-  //     {
-  //       owner: `${GH_ACCOUNT}`,
-  //       repo: `${GH_REPO_NAME}`,
-  //       hook_id: "393532361",
-  //     }
-  //   ),
+
+  // get a repo webhook
+  getRepoWebhook: await octokit.request(
+    "GET /repos/{owner}/{repo}/hooks/{hook_id}",
+    {
+      owner: `${GH_ACCOUNT}`,
+      repo: `${GH_REPO_NAME}`,
+      hook_id: "393663340",
+    }
+  ),
+
+  //get a webhook configuration for a repo
+  getWebhookConfig: await octokit.request(
+    "GET /repos/{owner}/{repo}/hooks/{hook_id}/config",
+    {
+      owner: `${GH_ACCOUNT}`,
+      repo: `${GH_REPO_NAME}`,
+      hook_id: "393663340",
+    }
+  ),
+
+  //ping a repository webhook
+  pingRepoWebhook: await octokit.request(
+    "POST /repos/{owner}/{repo}/hooks/{hook_id}/pings",
+    {
+      owner: `${GH_ACCOUNT}`,
+      repo: `${GH_REPO_NAME}`,
+      hook_id: "393663340",
+    }
+  ),
 };
 
 // const pooer = gitHubActions.listRepoWebhooks.data.forEach((item) => {

@@ -1,27 +1,70 @@
 import ngrok from "ngrok";
 
-import { gitHubActions, octokit } from "./octokit.js";
+import express from "express";
+
+const app = express();
 
 import { url } from "./ngrok.js";
 
+// import { NGROK_TOKEN } from "./hidden/index.js";
+
+// //import dotenv
+// import * as dotenv from "dotenv";
+// dotenv.config();
+
+// //make var for our token so it is hidden
+// const NGROK_TOKEN = process.env.NGROK_TOKEN;
+
+import { gitHubActions, octokit } from "./octokit.js";
+
 (async () => {
-  await url();
-  console.log(url);
+  //connect to ngrok server and return the tunnel they make
+  const currentUrl = await url;
+  console.log(`This is our ngrok tunnel : ${currentUrl}`);
 
-  // const specificHook = await gitHubActions.getRepoWebhook;
-  // console.log(specificHook);
+  //get our specific webhook
+  const specificHook = await gitHubActions.getRepoWebhook;
 
-  const listOfWebhooks = await gitHubActions.listRepoWebhooks;
-  await console.log(listOfWebhooks);
+  //the hooks data
+  console.log(specificHook.data);
 
-  // await gitHubActions.deleteSpecificRepoWebhook;
-  await console.log(gitHubActions.listRepoWebhooks.data.length);
+  //the OLD url to which the payloads will be delivered (to show change)
+  console.log(`the OLD url : ${specificHook.data.config.url}`);
 
+  //change the url that the payloads will be delivered to equal our ngrok tunnel
+  specificHook.data.config.url = await url;
+
+  //url should be changed now
+  await console.log(
+    `url should be changed now : ${specificHook.data.config.url}`
+  );
+
+  // console.log(specificHook.data);
+
+  //amount of webhooks for this repo
+  await console.log(
+    `The amount of webhooks for this repo is : ${gitHubActions.listRepoWebhooks.data.length}`
+  );
+
+  //this will trigger the hook with the latest push to the current repository(has to be sub to push events)
   const testPush = gitHubActions.testPushToRepoWebhook;
-  console.log(testPush.status);
+  console.log(`The test push status is : ${testPush.status}`); //Status: 204 => No Content
 
-  // const pooer = await gitHubActions.listRepoWebhooks.data.forEach((item) => {
-  //   console.log(item.id);
-  // });
-  // console.log(pooer);
+  console.log(testPush);
+
+  // //returns a list of webhook deliveries for a webhook configured in a repository
+  // const listOfDelivered = await gitHubActions.listDeleveriesForARepo;
+  // // console.log(listOfDelivered);
+  // //the # of deliveries
+  // console.log(
+  //   `The amount of webhook deliveries for THIS webhook in this repo is : ${listOfDelivered.data.length}`
+  // );
+
+  //this will trigger a ping event to be sent to the hook
+  const ping = await gitHubActions.pingRepoWebhook;
+  console.log(`ping : ${ping}`);
+
+  app.listen(8180, () => {
+    console.log("listening...");
+  });
 })();
