@@ -13,6 +13,18 @@ export const octokit = new Octokit({
   auth: `${GH_TOKEN}`,
 });
 
+export const updateGhWebhookUrl = async (ngrok_url) => {
+  await octokit.request("PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config", {
+    owner: "ben40d9",
+    repo: "next-blog",
+    hook_id: "393663340",
+    content_type: "json",
+    // insecure_ssl: "1",
+    //change here
+    url: `${ngrok_url}`,
+  });
+};
+
 //all webhook actions
 export const gitHubActions = {
   //create webhook
