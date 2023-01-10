@@ -31,19 +31,19 @@ import { gitHubActions, octokit } from "./octokit.js";
   // //the OLD url to which the payloads will be delivered (to show change)
   // console.log(`the OLD url : ${specificHook.data.config.url}`);
 
-  const updateWebhookConfig = await octokit.request(
-    "PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config",
-    {
-      owner: "ben40d9",
-      repo: "next-blog",
-      hook_id: "393663340",
-      content_type: "json",
-      //change here
-      url: `${currentUrl}`,
-    }
-  );
+  // const updateWebhookConfig = await octokit.request(
+  //   "PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config",
+  //   {
+  //     owner: "ben40d9",
+  //     repo: "next-blog",
+  //     hook_id: "393663340",
+  //     content_type: "json",
+  //     //change here
+  //     url: `${currentUrl}`,
+  //   }
+  // );
 
-  console.log(updateWebhookConfig);
+  // console.log(updateWebhookConfig);
 
   // //change the url that the payloads will be delivered to equal our ngrok tunnel
   // specificHook.data.config.url = await url;
