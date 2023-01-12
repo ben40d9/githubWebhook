@@ -9,22 +9,9 @@ import { url } from "./ngrok.js";
 
 import { gitHubActions, octokit, updateGhWebhookUrl } from "./octokit.js";
 
-// async function updatedWebhookConfig(poop) {
-//   await octokit.request("PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config", {
-//     owner: "ben40d9",
-//     repo: "next-blog",
-//     hook_id: "393663340",
-//     content_type: "json",
-//     //change here
-//     url: `${poop}/webhook`,
-//   });
-// }
-
 (async () => {
   await app.post("/webhook", async (req, res) => {
-    // const stringIfied = await JSON.stringify(req);
-    // await res.send(stringIfied);
-    await res.send(req);
+    res.send(console.log(`this is our req body${req.body.repository}`));
   });
 
   await app.listen(8180, () => {
@@ -44,8 +31,6 @@ import { gitHubActions, octokit, updateGhWebhookUrl } from "./octokit.js";
   //get the webhooks config
   const webhookConfig = await gitHubActions.getWebhookConfig;
   console.log(webhookConfig);
-
-  // await updatedWebhookConfig(tunnelUrl);
 
   await updateGhWebhookUrl(tunnelUrl);
 
