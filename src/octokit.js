@@ -1,6 +1,12 @@
 import { Octokit, App } from "octokit";
 
-import { GH_ACCOUNT, GH_REPO_NAME, GH_TOKEN } from "./hidden/index.js";
+import {
+  GH_ACCOUNT,
+  GH_REPO_NAME,
+  GH_TOKEN,
+  NEW_GH_TOKEN,
+  GH_WEBHOOK_SECRET,
+} from "./hidden/index.js";
 
 // //import dotenv
 // import * as dotenv from "dotenv";
@@ -10,8 +16,20 @@ import { GH_ACCOUNT, GH_REPO_NAME, GH_TOKEN } from "./hidden/index.js";
 // const { GH_TOKEN, GH_REPO_NAME, GH_ACCOUNT } = process.env;
 
 export const octokit = new Octokit({
-  auth: `${GH_TOKEN}`,
+  auth: `${NEW_GH_TOKEN}`,
 });
+
+export const updateGhWebhookUrl = async (ngrok_url) => {
+  await octokit.request("PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config", {
+    owner: `${GH_ACCOUNT}`,
+    repo: `${GH_REPO_NAME}`,
+    hook_id: "393663340",
+    secret: `${GH_WEBHOOK_SECRET}`,
+    // content_type: "application/vnd.github.v3+json",
+    // content_type: "json",
+    url: `${ngrok_url}/webhook`,
+  });
+};
 
 //all webhook actions
 export const gitHubActions = {
@@ -100,13 +118,3 @@ export const gitHubActions = {
     }
   ),
 };
-
-// const pooer = gitHubActions.listRepoWebhooks.data.forEach((item) => {
-//   console.log(item.id);
-// });
-// console.log(pooer);
-
-// const one = pooer.forEach((poo) => {
-//   [...poo];
-// });
-// console.log(one)
